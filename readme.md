@@ -32,3 +32,4 @@ Go to the extension page, and click the settings gear in the top right.  Click "
 - [crypto-js](https://github.com/brix/crypto-js) by brix
 - [jsQR](https://github.com/cozmo/jsQR) by cozmo
 - [optauth-uri-parser](https://gitlab.com/dominicp/otpauth-uri-parser) by Dominic
+- [Chrome Extension build script](https://stackoverflow.com/a/18709204)

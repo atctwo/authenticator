@@ -1,0 +1,25 @@
+name: Build Chrome Extension
+on:
+  push
+  
+jobs:
+    build-chrome:
+        runs-on: ubuntu-latest
+        steps:
+        
+            # checkout repo
+            - uses: actions/checkout@v3
+            
+            # retrieve the chrome extension pem
+            - name: Retrieve Chrome exension signing key and decode it to a file
+              env:
+                CERTIFICATE_BASE64: ${{ secrets.CHROME_CERTIFICATE_BASE64 }}
+              run: |
+                echo $CHROME_CERTIFICATE_BASE64 | base64 --decode > cert.pem
+                
+            # build chrome extension
+            - name: Build Chrome Extension
+              run: |
+                ls
+                # cd ${GITHUB_WORKSPACE}
+                # chmod +x ./scripts/build_chrome_extension.sh
