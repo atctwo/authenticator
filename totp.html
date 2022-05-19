@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="totp.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.2.0/css/fork-awesome.min.css" integrity="sha256-XoaMnoYC5TH6/+ihMEnospgm0J1PM/nioxbOUdnM8HY=" crossorigin="anonymous">
+</head>
+
+<body>
+    <div id="popup-content">
+        <h3 id="title">TOTP thing</h3>
+
+        <div class="panel" id="panel-intro">
+            <img src="icons/totp.png" id="intro-icon">
+            <span style="max-width: 70%;">
+                Welcome to TOTP Thing!  Please enter a password to start
+            </span><br><br>
+            <table id="intro-table">
+                <tr>
+                    <td rowspan="1">
+                        <input type="password" class="intro-password" id="input-password-intro" placeholder="Enter a password">
+                    </td>
+                    <td rowspan="2">
+                        <div class="button signin_intro">Start</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="1">
+                        <input type="password" class="intro-password" id="input-password-intro-verification" placeholder="Enter the same password">
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="panel" id="panel-signin">
+            <span>Please enter your password:</span><br><br>
+            <input type="password" id="input-password">
+            <div class="button signin" id="btn_signin">Sign In</div>
+        </div>
+
+        <div class="panel" id="panel-profiles">
+            <div id="no-profiles-message"><em>You haven't created any profiles. Click "+" to make one!</em></div>
+            <div id="table-container">
+                <table class="profile-table" id="profile-table">
+                </table><br>
+            </div>
+            <span class="button icon_btn new_profile" title="Create New Profile"><i class="fa fa-plus" aria-hidden="true"></i></span>
+            <span class="button icon_btn open_settings" title="Settings"><i class="fa fa-cog" aria-hidden="true"></i></span>
+            <span class="button icon_btn signout" title="Signout"><i class="fa fa-sign-out" aria-hidden="true"></i></span>
+        </div>
+
+        <div class="panel" id="panel-edit">
+
+            <span><em>Hover over field titles to see a more detailed description of each field</em></span>
+            <div class="button icon_btn scan_qr_code" id="scan_qr_code" title="Scan QR Code image"><i class="fa fa-qrcode" aria-hidden="true"></i></div>
+            <br><br>
+
+            <table class="edit-table">
+                <tr>
+                    <td title="A friendly name for the TOTP profile.  This can be anything!">Name</td>
+                    <td><input class="edit-field" id="edit-name" placeholder="A friendly name"></td>
+                </tr>
+                <tr>
+                    <td title="The TOTP key provided by the people who manage whatever you're logging in to">Secret Key</td>
+                    <td><input class="edit-field" id="edit-secret" placeholder="The TOTP secret key"></td>
+                </tr>
+                <tr>
+                    <td title="An icon that quickly identifies the profile">Icon</td>
+                    <td>
+                        <input class="edit-field" id="edit-icon" type="file" style="display: none;">
+                        <label for="edit-icon" class="button custom_file_upload" id="edit-icon-btn" style="width: 100%;">Upload a new icon</label>
+                    </td>
+                </tr>
+            </table><br>
+            <details>
+                <summary>Advanced Settings</summary><br>
+                <table class="edit-table">
+                    <tr>
+                        <td title="The id of the input field to autopopulate the code with when it is generated">Field ID</td>
+                        <td><input class="edit-field" id="edit-field" placeholder="Input field for the code"></td>
+                    </tr>
+                    <tr>
+                        <td title="An XPath that refers to a field to autopopulate (if there is no Field ID specified)">XPath</td>
+                        <td><input class="edit-field" id="edit-xpath" placeholder="XPath for a field"></td>
+                    </tr>
+                    <tr>
+                        <td title="The number of digits in the generated passcode (between 6 and 8)">Code Length</td>
+                        <td><input class="edit-field" id="edit-otp-length" type="number" min="6" max="8" placeholder="No. digits in code"></td>
+                    </tr>
+                    <tr>
+                        <td title="The length of time in seconds that a passcode is valid for">Expiry Time</td>
+                        <td><input class="edit-field" id="edit-otp-time" type="number" placeholder="Passcode expiry time"></td>
+                    </tr>
+                </table><br>
+            </details>
+            </table><br>
+            <span class="button close_edit_panel">Cancel</span>
+            <span class="button save_edit_panel">Save</span>
+        </div>
+
+        <div class="panel" id="panel-question">
+            <span id="question-text"></span><br><br>
+            <span class="button question_yes">Yes</span>&nbsp;
+            <span class="button question_no">No</span>
+        </div>
+
+        <div class="panel" id="panel-settings">
+            <span class="button settings_btn import_secrets">Import Secrets</span>
+            <span class="button settings_btn export_secrets">Export Secrets</span><br>
+            <span class="button settings_btn inject_colour">Inject Colour Script</span>
+            <span class="button settings_btn inject_colour_reset">Inject Colour Reset</span><br>
+            <span class="button settings_btn clear_data">Clear User Data</span>
+
+            <p>Made in 2021 by <a href="https://atctwo.co.uk">alice</a> :)<br>version <span id="version-number">1.1.0</span></p>
+
+            <span class="button close_edit_panel">Back</span>
+        </div>
+
+        <span id="status-message"></span>
+        <span id="error-message"></span>
+    </div>
+
+    <input type="file" style="display: none;" id="input-import-secrets">
+    <input type="file" style="display: none;" id="input-scan-qr-code">
+    <!-- <canvas id="qr-code" style="visibility: hidden;"></canvas> -->
+
+    <script src="lib/browser-polyfill.min.js"></script>
+    <script src="lib/crypto-js.js"></script>
+    <script src="lib/jsOTP.min.js"></script>
+    <script src="lib/optauth-uri-parser.js"></script>
+    <script src="lib/jsQR.js"></script>
+    <script src="totp.js"></script>
+</body>
+
+</html>
