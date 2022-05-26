@@ -331,7 +331,7 @@ function populate_table_thing() {
             // insert totp timer
             var profile_timer = document.createElement("span")
             profile_timer.id = "timer" + i.toString()
-            profile_timer.classList.add("profile-code")
+            profile_timer.classList.add("profile-timer")
             profile_name.dataset.id = i;
 
             // space
@@ -463,7 +463,7 @@ function send_totp(e) {
                     code_thing.innerText = ""
                     timer_thing.innerText = ""
                     send_totp(e)
-                } else timer_thing.innerText = "(" + seconds_left.toString() + ")"
+                } else timer_thing.innerText = " (" + seconds_left.toString() + ")"
             }, 1000)
 
             // inject code into page
