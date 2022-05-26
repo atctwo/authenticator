@@ -187,7 +187,6 @@ function load_profiles(popup = false) {
             user_data_exists().then(() => {
                 if (signed_in) switch_panel("panel-profiles")
                 else switch_panel("panel-signin")
-                console.log("aa")
             }).catch(err => {
                 switch_panel("panel-intro")
             })
@@ -578,6 +577,8 @@ function edit_profile(profile_index) {
         // populate the profile fields
         document.getElementById("edit-name").value = secret.name
         document.getElementById("edit-secret").value = CryptoJS.AES.decrypt(secret.secret, password).toString(CryptoJS.enc.Utf8)
+        document.getElementById("edit-icon").value = ""
+        document.getElementById("edit-icon-btn").innerText = "Upload a new icon"
         document.getElementById("edit-field").value = secret.field || ""
         document.getElementById("edit-xpath").value = secret.xpath || ""
         document.getElementById("edit-otp-length").value = secret.length
@@ -743,6 +744,7 @@ function write_verification_data() {
  * Check that a password is correct, then sign into the extension
  */
 function signin() {
+    print("AFUFBASFUBAFSA")
     var pword = document.getElementById("input-password").value
 
     browser.storage.local.get("verification").then(res => {

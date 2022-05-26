@@ -10,16 +10,22 @@ jobs:
             # checkout repo
             - uses: actions/checkout@v3
             
-            # retrieve the chrome extension pem
-            - name: Retrieve Chrome exension signing key and decode it to a file
+            # get certificate
+            - name: Get Chrome Certificate
               env:
-                CERTIFICATE_BASE64: ${{ secrets.CHROME_CERTIFICATE_BASE64 }}
+                CHROME_CERTIFICATE: ${{ secrets.CHROME_CERTIFICATE }}
               run: |
-                echo $CHROME_CERTIFICATE_BASE64 | base64 --decode > cert.pem
-                
+                echo $CHROME_CERTIFICATE > cert.pem
+            
             # build chrome extension
             - name: Build Chrome Extension
+              uses: GabrielBB/xvfb-action@v1
+              with:
+                run: |
+                    google-chrome --headless --pack-extension=./ --pack-extension-key=cert.pem
+                
+            # test extension was built
+            - name: Extension Build Check
               run: |
                 ls
-                # cd ${GITHUB_WORKSPACE}
-                # chmod +x ./scripts/build_chrome_extension.sh
+                ls authenticator-chrome.ctx

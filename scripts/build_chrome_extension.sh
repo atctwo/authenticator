@@ -8,7 +8,7 @@ fi
 
 dir=$1
 key=$2
-name=$(basename "$dir")
+name="authenticator-chrome"
 crx="$name.crx"
 pub="$name.pub"
 sig="$name.sig"
@@ -19,15 +19,18 @@ trap 'rm -f "$pub" "$sig" "$zip" "$tosign" "$binary_crx_id"' EXIT
 
 
 # zip up the crx dir
+echo "compressing to zip"
 cwd=$(pwd -P)
 (cd "$dir" && zip -qr -9 -X "$cwd/$zip" .)
 
 
 #extract crx id
-openssl rsa -in "$key" -pubout -outform der | openssl dgst -sha256 -binary -out "$binary_crx_id"
+echo "extracting ctx id"
+openssl pkcs8 -in "$key" -nocrypt -outform der | openssl dgst -sha256 -binary -out "$binary_crx_id"
 truncate -s 16 "$binary_crx_id"
 
 #generate file to sign
+echo "generating file to sign"
 (
   # echo "$crmagic_hex $version_hex $header_length $pub_len_hex $sig_len_hex"
   printf "CRX3 SignedData"
@@ -36,12 +39,14 @@ truncate -s 16 "$binary_crx_id"
 ) > "$tosign"
 
 # signature
+echo "generating signature"
 openssl dgst -sha256 -binary -sign "$key" < "$tosign" > "$sig"
 
 # public key
-openssl rsa -pubout -outform DER < "$key" > "$pub" 2>/dev/null
+echo "public key"
+openssl pkcs8 -nocrypt -pubout -outform DER < "$key" > "$pub" 2>/dev/null
 
-
+echo "writing crx"
 crmagic_hex="43 72 32 34" # Cr24
 version_hex="03 00 00 00" # 3
 header_length="45 02 00 00"
