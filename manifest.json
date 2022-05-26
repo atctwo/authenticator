@@ -2,14 +2,14 @@
 
     "manifest_version": 2,
     "name": "Alice's Authenticator",
-    "version": "1.1.0",
+    "version": "1.1.1",
 
     "description": "An everyday TOTP authenticator",
     "author": "atctwo",
 
     "browser_action": {
         "default_icon": "icons/totp.png",
-        "default_title": "TOTP Thing",
+        "default_title": "Alice's Authenticator",
         "default_popup": "totp.html"
     },
 
