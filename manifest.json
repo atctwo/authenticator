@@ -21,5 +21,12 @@
     "permissions": [
         "activeTab",
         "storage"
-    ]
+    ],
+
+    "options_ui": {
+        "page": "totp.html",
+        "open_in_tab": true,
+        "browser_style": false,
+        "chrome_style": false
+    }
 }

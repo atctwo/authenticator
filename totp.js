@@ -219,7 +219,7 @@ function listenForClicks() {
                     send_totp(e)
                 })
                 .catch(err => {
-                    console.error(`Error: ${error}`);
+                    console.error(`Error: ${err}`);
                     set_error("Error generating TOTP", err);
                 });
         } else if (e.target.classList.contains("close_edit_panel")) {
@@ -241,6 +241,13 @@ function listenForClicks() {
 
         } else if (e.target.classList.contains("open_settings")) {
             switch_panel("panel-settings")
+        } else if (e.target.classList.contains("new_tab")) {
+            chrome.runtime.openOptionsPage().then(() => {
+                console.log("Opened in new tab");
+            }, err => {
+                console.error("Failed to open in new tab", err);
+                set_error("Failed to open in new tab", err);
+            })
         } else if (e.target.classList.contains("export_secrets")) {
             export_secrets()
         } else if (e.target.classList.contains("import_secrets")) {

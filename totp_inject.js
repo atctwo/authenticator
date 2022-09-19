@@ -1,5 +1,14 @@
 var input = null
 
+// test file select thing
+// var input = document.createElement("input");
+// input.type = "file";
+// input.onchange = (event) => {
+//     console.log(event)
+//     console.log(input.files)
+// }
+// input.click();
+
 // if there is a field id
 if (config.input_id)
 {
