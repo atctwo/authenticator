@@ -13,12 +13,12 @@
     <div id="popup-container">
 
         <div id="popup-content">
-            <h3 id="title">TOTP thing</h3>
+            <h3 id="title">Alice's Authenticator</h3>
 
             <div class="panel" id="panel-intro">
                 <img src="icons/totp.png" id="intro-icon">
                 <span style="max-width: 70%;">
-                    Welcome to TOTP Thing!  Please enter a password to start
+                    Welcome to Alice's Authenticator!  Please enter a password to start
                 </span><br><br>
                 <table id="intro-table">
                     <tr>
@@ -49,10 +49,13 @@
                     <table class="profile-table" id="profile-table">
                     </table><br>
                 </div>
-                <span class="button icon_btn new_profile" title="Create New Profile"><i class="fa fa-plus" aria-hidden="true"></i></span>
-                <span class="button icon_btn open_settings" title="Settings"><i class="fa fa-cog" aria-hidden="true"></i></span>
-                <span class="button icon_btn new_tab" title="Open in New Tab"><i class="fa fa-external-link" aria-hidden="true"></i></span>
-                <span class="button icon_btn signout" title="Signout"><i class="fa fa-sign-out" aria-hidden="true"></i></span>
+
+                <div id="action-btns-container">
+                    <div class="button icon_btn new_profile" title="Create New Profile"><i class="fa fa-plus" aria-hidden="true"></i></div>
+                    <div class="button icon_btn open_settings" title="Settings"><i class="fa fa-cog" aria-hidden="true"></i></div>
+                    <div class="button icon_btn new_tab" title="Open in New Tab"><i class="fa fa-external-link" aria-hidden="true"></i></div>
+                    <div class="button icon_btn signout" title="Signout"><i class="fa fa-sign-out" aria-hidden="true"></i></div>
+                </div>
             </div>
 
             <div class="panel" id="panel-edit">
@@ -100,7 +103,7 @@
                     </table><br>
                 </details>
                 </table><br>
-                <span class="button close_edit_panel">Cancel</span>
+                <span class="button close_edit_panel">Cancel</span><br><br>
                 <span class="button save_edit_panel">Save</span>
             </div>
 
@@ -111,13 +114,13 @@
             </div>
 
             <div class="panel" id="panel-settings">
-                <span class="button settings_btn import_secrets">Import Secrets</span>
-                <span class="button settings_btn export_secrets">Export Secrets</span><br>
-                <span class="button settings_btn inject_colour">Inject Colour Script</span>
-                <span class="button settings_btn inject_colour_reset">Inject Colour Reset</span><br>
-                <span class="button settings_btn clear_data">Clear User Data</span>
+                <span class="button settings_btn import_secrets"><i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;Import Secrets</span>
+                <span class="button settings_btn export_secrets"><i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;Export Secrets</span><br>
+                <span class="button settings_btn inject_colour"><i class="fa fa-arrow-down" aria-hidden="true"></i>&nbsp;Inject Colour Script</span>
+                <span class="button settings_btn inject_colour_reset"><i class="fa fa-arrow-up" aria-hidden="true"></i>&nbsp;Inject Colour Reset</span><br>
+                <span class="button settings_btn clear_data"><i class="fa fa-trash" aria-hidden="true"></i>&nbsp;Clear User Data</span>
 
-                <p>Made in 2021 by <a href="https://atctwo.co.uk">alice</a> :)<br>version <span id="version-number">1.2.0</span></p>
+                <p>Made in 2021 - 2024 by <a href="https://atctwo.net">alice</a> :)<br>version <span id="version-number">1.3.0</span></p>
 
                 <span class="button close_edit_panel">Back</span>
             </div>
