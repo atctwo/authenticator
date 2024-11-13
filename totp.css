@@ -1,14 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito&family=Varela+Round&display=swap');
 
 * {
-    /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; */
-    font-family: Nunito, sans-serif;
+    font-family: 'Nunito', sans-serif;
     font-size: medium;
     user-select: none;
+    box-sizing: border-box;
+}
+
+i {
+    font-size: medium;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: "Varela Round", sans-serif;
+    font-family: 'Varela Round', sans-serif;
 }
 
 input {
@@ -51,10 +55,12 @@ input {
 
 html,
 body {
-    height: 100%;
-    margin: 0;
+    width: 350px;
+    height: 400px;
+    margin: 0px;
     /* width: 250px;
     border-radius: 10px; */
+    /* overflow: hidden; */
 }
 
 .hidden {
@@ -74,8 +80,9 @@ body {
 }
 
 .icon_btn {
-    width: 20px;
-    height: 20px
+    width: 30px;
+    height: 30px;
+    /* padding: 15px; */
 }
 
 
@@ -105,6 +112,10 @@ body {
     width: 350px;
     border-radius: 10px;
     padding: 5px;
+    display: flex;
+    flex-direction: column;
+    /* border-radius: 10px; */
+    /* padding: 5px; */
 }
 
 #intro-icon {
@@ -159,8 +170,13 @@ body {
 }
 
 .panel {
+    /* height: 100%; */
     display: none;
+    /* display will be set yo flex when panel is shown */
     position: relative;
+    min-height: 0;
+
+    flex-direction: column;
 }
 
 .profile-table {
@@ -187,8 +203,6 @@ body {
 }
 
 #scan_qr_code {
-    width: 20px;
-    height: 20px;
     position: absolute;
     top: 5px;
     right: 5px;
@@ -219,4 +233,8 @@ body {
 
 #status-message {
     width: 95%;
+}
+
+#action-btns-container {
+    margin-top: 10px;
 }

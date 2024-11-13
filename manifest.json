@@ -28,5 +28,11 @@
         "open_in_tab": true,
         "browser_style": false,
         "chrome_style": false
+    },
+
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "authenticator.ext@atctwo.net"
+        }
     }
 }

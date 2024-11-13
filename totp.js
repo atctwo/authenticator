@@ -525,8 +525,10 @@ function switch_panel(panel_name) {
     // open new panel
     var new_panel = document.getElementById(panel_name)
     if (new_panel) {
-        new_panel.style.display = "block";
+        if (panel_name == "panel-profiles") new_panel.style.display = "flex";
+        else new_panel.style.display = "block";
         open_panel = panel_name;
+        if (panel_name == "panel-intro")    document.getElementById("title").innerText = title_thing;
         if (panel_name == "panel-profiles") document.getElementById("title").innerText = title_thing;
         if (panel_name == "panel-settings") document.getElementById("title").innerText = "Settings";
         if (panel_name == "panel-question") document.getElementById("title").innerText = "Confirmation";
@@ -762,7 +764,7 @@ function write_verification_data() {
  * Check that a password is correct, then sign into the extension
  */
 function signin() {
-    print("AFUFBASFUBAFSA")
+    // print("AFUFBASFUBAFSA")
     var pword = document.getElementById("input-password").value
 
     browser.storage.local.get("verification").then(res => {
