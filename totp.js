@@ -235,10 +235,10 @@ function listenForClicks() {
         } else if (e.target.classList.contains("remove_profile")) {
 
             ask_question("Are you sure you want to remove this profile?", () => {
-                remove_profile(e.target.dataset.id)
+                remove_profile(editing_profile)
             }, () => {
                 // nothing
-            });
+            }, return_panel="panel-profiles");
 
 
         } else if (e.target.classList.contains("open_settings")) {
@@ -394,17 +394,23 @@ function populate_table_thing() {
             cell_button.innerHTML = "<div class='button icon_btn send_totp' data-id='" + i + "' title='Generate!'><i class='fa fa-refresh' aria-hidden='true'></i></div>";
             cell_button.dataset.id = i;
 
+            // add the inject button
+            var cell_button = row.insertCell(-1);
+            cell_button.classList.add("profile-button")
+            cell_button.innerHTML = "<div class='button icon_btn inject_totp' data-id='" + i + "' title='Generate!'><i class='fa fa-download' aria-hidden='true'></i></div>";
+            cell_button.dataset.id = i;
+
             // add edit button
             var cell_edit = row.insertCell(-1);
             cell_edit.classList.add("profile-button")
             cell_edit.innerHTML = "<div class='button icon_btn edit_profile' data-id='" + i + "' title='Edit Profile'><i class='fa fa-pencil' aria-hidden='true'></i></div>";
             cell_edit.dataset.id = i;
 
-            var cell_remove = row.insertCell(-1);
-            cell_remove.classList.add("profile-button")
-            cell_remove.title = "Remove Profile"
-            cell_remove.innerHTML = "<div class='button icon_btn remove_profile' data-id='" + i + "' title='Remove Profile'><i class='fa fa-times' aria-hidden='true'></i></div>";
-            cell_remove.dataset.id = i;
+            // var cell_remove = row.insertCell(-1);
+            // cell_remove.classList.add("profile-button")
+            // cell_remove.title = "Remove Profile"
+            // cell_remove.innerHTML = "<div class='button icon_btn remove_profile' data-id='" + i + "' title='Remove Profile'><i class='fa fa-times' aria-hidden='true'></i></div>";
+            // cell_remove.dataset.id = i;
 
         }
 
@@ -702,6 +708,8 @@ function save_profile() {
  * @param {*} profile_id the id of the profile to remove
  */
 function remove_profile(profile_id) {
+
+    console.log("deleting profile", profile_id)
 
     // remove the profile
     secrets.splice(profile_id, 1);
