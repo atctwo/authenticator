@@ -2,26 +2,26 @@ if (typeof browser === "undefined") {
     var browser = chrome;
 }
 
-var open_panel = ""                                 // ???
-var editing_profile = -1;                           // the id of the profile currently being edited; -1 if none
-var secrets = []                                    // array of profile objects
-var title_thing = "Alice's Authenticator"           // the name to show at the top of the popup
-var password = ""                                   // the currently entered password
-var signed_in = false                               // whether or not the user is signed in
-var verification_test = "(Top of the Pops 1997)"    // phrase that's used to make sure the user's password is correct
-var theme_colour = "teal"                           // name of the colour used for ui accents
+let open_panel = ""                                 // ???
+let editing_profile = -1;                           // the id of the profile currently being edited; -1 if none
+let secrets = []                                    // array of profile objects
+let title_thing = "Alice's Authenticator"           // the name to show at the top of the popup
+let password = ""                                   // the currently entered password
+let signed_in = false                               // whether or not the user is signed in
+let verification_test = "(Top of the Pops 1997)"    // phrase that's used to make sure the user's password is correct
+let theme_colour = "teal"                           // name of the colour used for ui accents
 
-var question_yes_action = () => { console.log("Question not setup") }
-var question_no_action = () => { console.log("Question not setup") }
+let question_yes_action = () => { console.log("Question not setup") }
+let question_no_action = () => { console.log("Question not setup") }
 
 // Function to download data to a file
 // from https://stackoverflow.com/a/30832210
 function download(data, filename, type) {
-    var file = new Blob([data], { type: type });
+    let file = new Blob([data], { type: type });
     if (window.navigator.msSaveOrOpenBlob) // IE10+
         window.navigator.msSaveOrOpenBlob(file, filename);
     else { // Others
-        var a = document.createElement("a"),
+        let a = document.createElement("a"),
             url = URL.createObjectURL(file);
         a.href = url;
         a.download = filename;
@@ -58,13 +58,13 @@ function import_secrets() {
 // event listener for when a file is selected using import secrets
 document.getElementById("input-import-secrets").addEventListener("change", (event) => {
 
-    var files = event.target.files;
+    let files = event.target.files;
     if (files.length > 0) {
-        var file = files[0]
-        var reader = new FileReader();
+        let file = files[0]
+        let reader = new FileReader();
         reader.onloadend = function() {
 
-            var temp_secrets = JSON.parse(reader.result)
+            let temp_secrets = JSON.parse(reader.result)
 
             if ("secrets" in temp_secrets) {
 
@@ -98,29 +98,29 @@ function scan_qr_code() {
 // onchange listener for QR code input
 document.getElementById("input-scan-qr-code").addEventListener("change", (event) => {
 
-    var files = event.target.files;
+    let files = event.target.files;
     if (files.length > 0) {
-        var file = files[0]
+        let file = files[0]
 
         // get ImageData from a local image file
         // from https://stackoverflow.com/a/36394704
-        var url = URL.createObjectURL(file) // create an Object URL
-        var img = new Image(); // create a temp. image object
+        let url = URL.createObjectURL(file) // create an Object URL
+        let img = new Image(); // create a temp. image object
 
         img.onload = function() { // handle async image loading
 
             URL.revokeObjectURL(this.src); // free memory held by Object URL
-            var c = document.createElement("canvas")
-            var ctx = c.getContext("2d")
+            let c = document.createElement("canvas")
+            let ctx = c.getContext("2d")
             c.width = img.width;
             c.height = img.height;
 
             ctx.drawImage(this, 0, 0); // draw image onto canvas (lazy method™)
-            var idata = ctx.getImageData(0, 0, c.width, c.height);
+            let idata = ctx.getImageData(0, 0, c.width, c.height);
             console.log(idata)
 
             // parse the image data as a QR code
-            var qr = jsQR(idata.data, idata.width, idata.height)
+            let qr = jsQR(idata.data, idata.width, idata.height)
             if (qr) {
 
                 // if a qr code was detected, populate the profile form fields
@@ -300,7 +300,7 @@ function listenForClicks() {
  */
 function populate_table_thing() {
 
-    var table = document.getElementById("profile-table")
+    let table = document.getElementById("profile-table")
 
     // clear table
     while (table.childElementCount > 0) table.removeChild(table.firstChild)
@@ -308,14 +308,14 @@ function populate_table_thing() {
     // add profiles to table
     if (secrets.length > 0) {
         document.getElementById("no-profiles-message").style.display = "none"
-        for (var i = 0; i < secrets.length; i++) {
+        for (let i = 0; i < secrets.length; i++) {
 
-            var secret = secrets[i]
+            let secret = secrets[i]
             console.log(secret)
 
             // insert new row
-            var row_id = Math.floor(100000 + Math.random() * 900000)
-            var row = table.insertRow(-1);
+            let row_id = Math.floor(100000 + Math.random() * 900000)
+            let row = table.insertRow(-1);
             row.setAttribute("draggable", true)
             row.dataset.id = i;
             row.ondrop = handle_drop;
@@ -325,31 +325,31 @@ function populate_table_thing() {
             }
 
             // insert icon
-            var cell_icon = row.insertCell(-1);
+            let cell_icon = row.insertCell(-1);
             cell_icon.classList.add("profile-icon")
             cell_icon.innerHTML = "<img class='icon' src='" + secret.icon + "'>"
             cell_icon.dataset.id = i;
 
             // insert profile name
-            var profile_name = document.createElement("div")
+            let profile_name = document.createElement("div")
             profile_name.classList.add("profile-name")
             profile_name.style.verticalAlign = "middle";
             profile_name.innerText = secret.name;
             profile_name.dataset.id = i;
 
             // insert totp timer
-            var profile_timer = document.createElement("span")
+            let profile_timer = document.createElement("span")
             profile_timer.id = "timer" + i.toString()
             profile_timer.classList.add("profile-timer")
             profile_name.dataset.id = i;
 
             // space
-            // var profile_space = document.createElement("span")
+            // let profile_space = document.createElement("span")
             // profile_space.innerHTML = "&nbsp;"
             // profile_space.dataset.id = i;
 
             // insert totp code
-            var profile_code = document.createElement("span")
+            let profile_code = document.createElement("span")
             profile_code.id = "secret" + i.toString()
             profile_code.dataset.id = i;
             profile_code.classList.add("profile-code")
@@ -358,9 +358,9 @@ function populate_table_thing() {
                 console.log("Clicked on code", event)
 
                 // copy code
-                var code = event.target.innerText;
+                let code = event.target.innerText;
                 navigator.clipboard.writeText(code)
-                var copied = true
+                let copied = true
 
                 // set text to copied!
                 event.target.innerText = "Copied!"
@@ -374,7 +374,7 @@ function populate_table_thing() {
             }
 
             // add name, timer, space, and code to a container
-            var profile_name_container = document.createElement("div")
+            let profile_name_container = document.createElement("div")
             profile_name_container.classList.add("profile-name-container")
             profile_name_container.appendChild(profile_name)
             profile_name_container.appendChild(profile_code)
@@ -383,30 +383,30 @@ function populate_table_thing() {
             profile_name_container.dataset.id = i;
 
             // insert the container
-            var cell_name = row.insertCell(-1);
+            let cell_name = row.insertCell(-1);
             cell_name.style.verticalAlign = "middle"
             cell_name.appendChild(profile_name_container)
             cell_name.dataset.id = i;
 
             // add the generate button
-            var cell_button = row.insertCell(-1);
+            let cell_button = row.insertCell(-1);
             cell_button.classList.add("profile-button")
             cell_button.innerHTML = "<div class='button icon_btn send_totp' data-id='" + i + "' title='Generate!'><i class='fa fa-refresh' aria-hidden='true'></i></div>";
             cell_button.dataset.id = i;
 
             // add the inject button
-            var cell_button = row.insertCell(-1);
-            cell_button.classList.add("profile-button")
-            cell_button.innerHTML = "<div class='button icon_btn inject_totp' data-id='" + i + "' title='Generate!'><i class='fa fa-download' aria-hidden='true'></i></div>";
-            cell_button.dataset.id = i;
+            let cell_button2 = row.insertCell(-1);
+            cell_button2.classList.add("profile-button")
+            cell_button2.innerHTML = "<div class='button icon_btn inject_totp' data-id='" + i + "' title='Generate!'><i class='fa fa-download' aria-hidden='true'></i></div>";
+            cell_button2.dataset.id = i;
 
             // add edit button
-            var cell_edit = row.insertCell(-1);
+            let cell_edit = row.insertCell(-1);
             cell_edit.classList.add("profile-button")
             cell_edit.innerHTML = "<div class='button icon_btn edit_profile' data-id='" + i + "' title='Edit Profile'><i class='fa fa-pencil' aria-hidden='true'></i></div>";
             cell_edit.dataset.id = i;
 
-            // var cell_remove = row.insertCell(-1);
+            // let cell_remove = row.insertCell(-1);
             // cell_remove.classList.add("profile-button")
             // cell_remove.title = "Remove Profile"
             // cell_remove.innerHTML = "<div class='button icon_btn remove_profile' data-id='" + i + "' title='Remove Profile'><i class='fa fa-times' aria-hidden='true'></i></div>";
@@ -450,31 +450,31 @@ function send_totp(e, inject=false) {
     //     .then(data => {
 
             // get TOTP parameters
-            var secret_id = e.target.dataset.id
-            var secret = CryptoJS.AES.decrypt(secrets[secret_id].secret, password).toString(CryptoJS.enc.Utf8)
-            var code_length = secrets[secret_id].length || 6; // number of digits in the code
-            var code_time = secrets[secret_id].time || 30; // code expiry time in seconds
-            var element_id = secrets[secret_id].field; // id of field to add code to
-            var xpath = secrets[secret_id].xpath;      // xpath of the field aaaaaaaaaaaaa
-            // var internet_time_ms = data.unixtime * 1000 // js unix time (milliseconds)
-            var internet_time_ms = Date.now(); // js unix time (milliseconds)
+            let secret_id = e.target.dataset.id
+            let secret = CryptoJS.AES.decrypt(secrets[secret_id].secret, password).toString(CryptoJS.enc.Utf8)
+            let code_length = secrets[secret_id].length || 6; // number of digits in the code
+            let code_time = secrets[secret_id].time || 30; // code expiry time in seconds
+            let element_id = secrets[secret_id].field; // id of field to add code to
+            let xpath = secrets[secret_id].xpath;      // xpath of the field aaaaaaaaaaaaa
+            // let internet_time_ms = data.unixtime * 1000 // js unix time (milliseconds)
+            let internet_time_ms = Date.now(); // js unix time (milliseconds)
             
             // get TOTP code
-            var totp = new jsOTP.totp(code_time, code_length);
-            var totp_code = totp.getOtp(secret, internet_time_ms) // totp code
+            let totp = new jsOTP.totp(code_time, code_length);
+            let totp_code = totp.getOtp(secret, internet_time_ms) // totp code
 
             // calculate time left
-            var seconds_left = code_time - (Math.floor(internet_time_ms/1000) % code_time)
+            let seconds_left = code_time - (Math.floor(internet_time_ms/1000) % code_time)
 
             // write code to html
-            var code_thing = document.getElementById("secret" + secret_id.toString())
+            let code_thing = document.getElementById("secret" + secret_id.toString())
             code_thing.innerText = totp_code
 
             // setup timer thing
-            var timer_thing = document.getElementById("timer" + secret_id.toString())
+            let timer_thing = document.getElementById("timer" + secret_id.toString())
             timer_thing.innerText = " (" + seconds_left.toString() + ")"
 
-            var timer_interval = setInterval(() => {
+            let timer_interval = setInterval(() => {
                 seconds_left--;
                 if (seconds_left == -1) {
                     clearInterval(timer_interval)
@@ -487,7 +487,7 @@ function send_totp(e, inject=false) {
             // inject code into page
             if (inject) {
                 browser.tabs.executeScript({
-                    code: "var config = " + JSON.stringify({
+                    code: "let config = " + JSON.stringify({
                         input_id: element_id,
                         xpath: xpath,
                         value: totp_code
@@ -523,13 +523,13 @@ function send_totp(e, inject=false) {
 function switch_panel(panel_name) {
 
     // close current panel
-    var current_panel = document.getElementById(open_panel)
+    let current_panel = document.getElementById(open_panel)
     if (current_panel) {
         current_panel.style.display = "none";
     } else console.warn("panel", open_panel, "doesn't exist")
 
     // open new panel
-    var new_panel = document.getElementById(panel_name)
+    let new_panel = document.getElementById(panel_name)
     if (new_panel) {
         if (panel_name == "panel-profiles") new_panel.style.display = "flex";
         else new_panel.style.display = "block";
@@ -597,7 +597,7 @@ function edit_profile(profile_index) {
         document.getElementById("title").innerText = "Edit Profile"
 
         // get profile
-        var secret = secrets[profile_index]
+        let secret = secrets[profile_index]
         console.log(secret)
 
         // populate the profile fields
@@ -646,7 +646,7 @@ function save_profile() {
     }
 
 
-    var latest_secret = -1;
+    let latest_secret = -1;
     // if saving an new profile
     if (editing_profile == -1) {
 
@@ -678,13 +678,13 @@ function save_profile() {
     }
 
     // get icon
-    var icon_data = ""
-    var icon_input = document.getElementById("edit-icon");
-    var files = icon_input.files;
+    let icon_data = ""
+    let icon_input = document.getElementById("edit-icon");
+    let files = icon_input.files;
     if (files.length > 0) // if at least one file was selected
     {
-        var file = files[0];
-        var reader = new FileReader();
+        let file = files[0];
+        let reader = new FileReader();
         reader.onloadend = function() {
             // console.log('RESULT', reader.result)
             secrets[latest_secret].icon = reader.result
@@ -724,13 +724,13 @@ function remove_profile(profile_id) {
 }
 
 // set the profile icon button label
-var edit_icon = document.getElementById("edit-icon")
-var edit_icon_btn = document.getElementById("edit-icon-btn")
+let edit_icon = document.getElementById("edit-icon")
+let edit_icon_btn = document.getElementById("edit-icon-btn")
 edit_icon.addEventListener("change", event => {
-    var files = event.target.files;
+    let files = event.target.files;
     if (files.length > 0) {
         console.log(files)
-        var file = files[0]
+        let file = files[0]
         edit_icon_btn.innerText = file.name;
     }
 })
@@ -746,8 +746,8 @@ edit_icon.addEventListener("change", event => {
  */
 function write_verification_data() {
 
-    var pword = document.getElementById("input-password-intro").value
-    var pword2 = document.getElementById("input-password-intro-verification").value
+    let pword = document.getElementById("input-password-intro").value
+    let pword2 = document.getElementById("input-password-intro-verification").value
 
     if (pword != pword2) {
         set_error("Passwords don't match!")
@@ -773,12 +773,12 @@ function write_verification_data() {
  */
 function signin() {
     // print("AFUFBASFUBAFSA")
-    var pword = document.getElementById("input-password").value
+    let pword = document.getElementById("input-password").value
 
     browser.storage.local.get("verification").then(res => {
 
         console.log("got stored data:", res)
-        var decoded = CryptoJS.AES.decrypt(res.verification, pword).toString(CryptoJS.enc.Utf8)
+        let decoded = CryptoJS.AES.decrypt(res.verification, pword).toString(CryptoJS.enc.Utf8)
         console.log("decoded:", decoded)
         if (decoded == verification_test) {
             console.log("Password success?")
@@ -898,7 +898,7 @@ function handle_drop(event) {
 
     function set_row_id(row, new_id) {
         row.dataset.id = new_id;
-        for (var i = 0; i < row.children.length; i++) {
+        for (let i = 0; i < row.children.length; i++) {
             child = row.children[i];
             child.dataset.id = new_id;
             if (child.firstChild) child.firstChild.dataset.id = new_id;
@@ -906,10 +906,10 @@ function handle_drop(event) {
     }
 
     // get dropped on row
-    var dropped_on_row = get_row_with_id(dropped_on_row_id)
+    let dropped_on_row = get_row_with_id(dropped_on_row_id)
 
     // get dropped row
-    var dropped_row = get_row_with_id(dropped_row_id)
+    let dropped_row = get_row_with_id(dropped_row_id)
 
     console.log(dropped_row, "->", dropped_on_row)
 
@@ -917,14 +917,14 @@ function handle_drop(event) {
     table.tBodies[0].insertBefore(dropped_row, dropped_on_row)
 
     // swap row ids
-    // var temp_id = dropped_on_row_id
+    // let temp_id = dropped_on_row_id
     // set_row_id(dropped_on_row, dropped_row_id)
     // set_row_id(dropped_row, temp_id)
 
     // re-arrange secret array
     console.log(secrets)
-    var secrets2 = []
-    var row_thingy = 0;
+    let secrets2 = []
+    let row_thingy = 0;
     for (row of table.rows) {
 
         id = row.dataset.id;
@@ -953,25 +953,25 @@ function handle_drop(event) {
 load_profiles(true)
 listenForClicks()
 
-var intro_icon = document.getElementById("intro-icon")
-var intro_icon_hue = 0
+let intro_icon = document.getElementById("intro-icon")
+let intro_icon_hue = 0
 intro_icon.addEventListener("click", event => {
     intro_icon_hue += 5
     if (intro_icon_hue > 360) intro_icon_hue = 0
     intro_icon.style.filter = "hue-rotate(" + intro_icon_hue.toString() + "deg)";
 })
 
-var title_text = document.getElementById("title")
+let title_text = document.getElementById("title")
 
 function set_random_title_colour() {
 
     // generate random colour
-    theme_colour = (() => { var c = "#"; for (var i = 0; i < 3; i++) { c += Math.round(Math.random() * 255).toString(16).padStart(2, "0") }; return c })()
+    theme_colour = (() => { let c = "#"; for (let i = 0; i < 3; i++) { c += Math.round(Math.random() * 255).toString(16).padStart(2, "0") }; return c })()
 
     // set title colour
     title_text.style.color = theme_colour;
 
-    var css = `
+    let css = `
         .button { 
             background-color: ${theme_colour}
         }
@@ -979,7 +979,7 @@ function set_random_title_colour() {
             filter: brightness(80%);
         }
     `;
-    var style = document.createElement('style');
+    let style = document.createElement('style');
 
     if (style.styleSheet) {
         style.styleSheet.cssText = css;
@@ -992,10 +992,10 @@ function set_random_title_colour() {
 set_random_title_colour()
 title_text.addEventListener("click", set_random_title_colour)
 
-var set_font = (node) => { node.style.fontFamily = "Comic Sans MS"; for (var i = 0; i < node.children.length; i++) set_font(node.children[i]) }
+let set_font = (node) => { node.style.fontFamily = "Comic Sans MS"; for (let i = 0; i < node.children.length; i++) set_font(node.children[i]) }
 
 // add enter key event listeners
-var btn_signin = document.getElementById("btn_signin")
+let btn_signin = document.getElementById("btn_signin")
 document.addEventListener("keypress", event => {
     if (event.key == "Enter") {
         if (open_panel == "panel-signin") {
@@ -1011,10 +1011,10 @@ function css_modifier(node) {
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
     }
-    var random_colour = () => { var c = "#"; for (var i = 0; i < 3; i++) { c += Math.round(Math.random() * 255).toString(16).padStart(2, "0") }; return c }
+    let random_colour = () => { let c = "#"; for (let i = 0; i < 3; i++) { c += Math.round(Math.random() * 255).toString(16).padStart(2, "0") }; return c }
 
     node.style.transition = `filter ${getRandomInt(60, 100)}s, transform ${getRandomInt(60, 100)}s ease-in`;
-    var filter = `blur(${getRandomInt(0, 0.5)}px) hue-rotate(${getRandomInt(0, 180)}deg) invert(${getRandomInt(0, 5)}%) drop-shadow(${getRandomInt(0, 1)}px ${getRandomInt(0, 1)}px ${getRandomInt(0, 5)}px ${random_colour()}) brightness(${getRandomInt(100, 110)}%) contrast(${getRandomInt(100, 110)}%)`;
+    let filter = `blur(${getRandomInt(0, 0.5)}px) hue-rotate(${getRandomInt(0, 180)}deg) invert(${getRandomInt(0, 5)}%) drop-shadow(${getRandomInt(0, 1)}px ${getRandomInt(0, 1)}px ${getRandomInt(0, 5)}px ${random_colour()}) brightness(${getRandomInt(100, 110)}%) contrast(${getRandomInt(100, 110)}%)`;
     node.style.filter = filter;
     node.style.webkitFilter = filter;
     node.style.transform = `scale(${getRandomInt(90, 110)}%, ${getRandomInt(90, 110)}%) rotate(${4 - getRandomInt(0, 8)}deg) translate(${10 - getRandomInt(0, 20)}px, ${10 - getRandomInt(0, 20)}px)`;
@@ -1024,5 +1024,5 @@ function css_modifier(node) {
     console.log("webkit filter", node.style.webkitFilter)
     console.log("transform", node.style.transform)
 
-    for (var i = 0; i < node.children.length; i++) css_modifier(node.children[i])
+    for (let i = 0; i < node.children.length; i++) css_modifier(node.children[i])
 }
