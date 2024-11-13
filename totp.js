@@ -213,15 +213,17 @@ function listenForClicks() {
     console.log("adding event listener")
     document.addEventListener("click", (e) => {
 
-        if (e.target.classList.contains("send_totp")) {
+        if (e.target.classList.contains("inject_totp")) {
             browser.tabs.query({ active: true, currentWindow: true })
                 .then(() => {
-                    send_totp(e)
+                    send_totp(e, true);  // generate totp and inject into page
                 })
                 .catch(err => {
                     console.error(`Error: ${err}`);
                     set_error("Error generating TOTP", err);
                 });
+        } else if (e.target.classList.contains("send_totp")) {
+            send_totp(e, false);  // generate totp without injecting
         } else if (e.target.classList.contains("close_edit_panel")) {
             switch_panel("panel-profiles")
         } else if (e.target.classList.contains("save_edit_panel")) {
@@ -433,11 +435,13 @@ function set_status(status) {
  * Calculate a TOTP code, write it to the extension interface, and attempt to add it to a field in the main document.
  * Should be called from the button event listener
  * @param {*} e the event fired by the event listener
+ * @param {boolean} inject whether to inject the code after generation
  */
-function send_totp(e) {
-    fetch("https://worldtimeapi.org/api/timezone/Etc/UTC")
-        .then(res => res.json())
-        .then(data => {
+function send_totp(e, inject=false) {
+    set_status("Generating code...")
+    // fetch("https://worldtimeapi.org/api/timezone/Etc/UTC")
+    //     .then(res => res.json())
+    //     .then(data => {
 
             // get TOTP parameters
             var secret_id = e.target.dataset.id
@@ -446,7 +450,8 @@ function send_totp(e) {
             var code_time = secrets[secret_id].time || 30; // code expiry time in seconds
             var element_id = secrets[secret_id].field; // id of field to add code to
             var xpath = secrets[secret_id].xpath;      // xpath of the field aaaaaaaaaaaaa
-            var internet_time_ms = data.unixtime * 1000 // js unix time (milliseconds)
+            // var internet_time_ms = data.unixtime * 1000 // js unix time (milliseconds)
+            var internet_time_ms = Date.now(); // js unix time (milliseconds)
             
             // get TOTP code
             var totp = new jsOTP.totp(code_time, code_length);
@@ -474,29 +479,35 @@ function send_totp(e) {
             }, 1000)
 
             // inject code into page
-            browser.tabs.executeScript({
-                code: "var config = " + JSON.stringify({
-                    input_id: element_id,
-                    xpath: xpath,
-                    value: totp_code
+            if (inject) {
+                browser.tabs.executeScript({
+                    code: "var config = " + JSON.stringify({
+                        input_id: element_id,
+                        xpath: xpath,
+                        value: totp_code
+                    })
+                }).then(() => {
+                    return browser.tabs.executeScript({
+                        file: "/totp_inject.js"
+                    })
+                }).then(() => {
+                    // it worked
+                    set_error("")
+                }).catch(err => {
+                    // document.querySelector("#popup-content").classList.add("hidden");
+                    // document.querySelector("#error-content").classList.remove("hidden");
+                    console.error("Failed to inject script", err)
+                    set_error("Failed to inject field loader script", err)
                 })
-            }).then(() => {
-                return browser.tabs.executeScript({
-                    file: "/totp_inject.js"
-                })
-            }).then(() => {
-                // it worked
-                set_error("")
-            }).catch(err => {
-                // document.querySelector("#popup-content").classList.add("hidden");
-                // document.querySelector("#error-content").classList.remove("hidden");
-                console.error("Failed to inject script", err)
-                set_error("Failed to inject field loader script", err)
-            })
-        }).catch(err => {
-            console.error("fetch time error", err)
-            set_error("Failed to get internet time", err)
-        })
+            }
+
+            // clear message
+            set_status("")
+
+        // }).catch(err => {
+        //     console.error("fetch time error", err)
+        //     set_error("Failed to get internet time", err)
+        // })
 }
 
 /**

@@ -1,8 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&family=Varela+Round&display=swap');
+
 * {
     /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; */
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: Nunito, sans-serif;
     font-size: medium;
     user-select: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Varela Round", sans-serif;
 }
 
 input {
@@ -45,7 +51,8 @@ input {
 
 html,
 body {
-    height: 98%;
+    height: 100%;
+    margin: 0;
     /* width: 250px;
     border-radius: 10px; */
 }
@@ -95,7 +102,7 @@ body {
 }
 
 #popup-content {
-    width: 300px;
+    width: 350px;
     border-radius: 10px;
     padding: 5px;
 }
@@ -148,7 +155,7 @@ body {
     object-fit: cover;
 
     /* border: 2px solid #00ced1; */
-    border-radius: 5px;
+    border-radius: 8px;
 }
 
 .panel {
@@ -159,10 +166,11 @@ body {
 .profile-table {
     width: 100%;
     vertical-align: middle;
+    border-spacing: 5px;
 }
 
 #table-container {
-    max-height: 250px;
+    max-height: 400px;
     overflow: auto;
 }
 
